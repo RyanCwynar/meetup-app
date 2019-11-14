@@ -1,19 +1,53 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app id="inspire">
+    <app-nav-drawer 
+      :drawer="drawer" 
+      @drawerState="drawer = $event"/>
+    <app-header 
+      :drawer="drawer" 
+      @drawerState="drawer = $event"/>
+    <v-content>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <router-view/>
+        </v-row>
+      </v-container>
+    </v-content>
+    <v-btn
+      bottom
+      color="pink"
+      dark
+      fab
+      fixed
+      right
+      @click="dialog = !dialog"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+    <create-event-dialog 
+      :dialog="dialog" 
+      @dialogState="dialog = $event"/>
+  </v-app>
 </template>
 
-<style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
-</style>
+<script>
+  import AppHeader from '@/components/AppHeader.vue'
+  import AppNavDrawer from '@/components/AppNavDrawer.vue'
+  import CreateEventDialog from '@/components/CreateEventDialog.vue'
+  export default {
+    props: {
+      source: String,
+    },
+    components: {AppHeader, AppNavDrawer, CreateEventDialog},
+    data: () => ({
+      dialog: false,
+      drawer: null,
+    }),
+  }
+</script>
