@@ -45,7 +45,6 @@
             <v-list-item
               v-for="(child, i) in item.children"
               :key="i"
-              
               link
             >
               <v-list-item-action v-if="child.icon">
@@ -97,11 +96,11 @@
       items: [
        
         { icon: 'mdi-calendar-range',
-          text: 'Search Events', 
+          text: 'Events', 
           link: '/' },
         {
           icon: 'mdi-account-group',
-          text: 'Search Groups',
+          text: 'Groups',
           link: '/groups'
         },
         { 

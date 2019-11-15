@@ -1,6 +1,7 @@
 import auth0 from 'auth0-js'
 import Vue from 'vue'
 
+
 // exchange the object with your own from the setup step above.
 let webAuth = new auth0.WebAuth({
   domain: 'dev-if74kmty.auth0.com',
@@ -8,18 +9,26 @@ let webAuth = new auth0.WebAuth({
   // make sure this line is contains the port: 8080
   redirectUri: `http://localhost:8080/login`,
   // we will use the api/v2/ to access the user information as payload
-  audience: 'https://' + 'dev-if74kmty.auth0.com' + '/api/v2', 
+  audience: 'meetup-alternative-api', 
   responseType: 'token id_token',
   scope: 'openid profile' // define the scopes you want to use
 })
 
 let auth = new Vue({
+  data(){
+    return {
+      tokenValue: localStorage.getItem('id_token') || '',
+      userValue: JSON.parse(localStorage.getItem('user')) || {},
+      expiresAtValue: localStorage.getItem('expires_at') || 0,
+    };
+  },
   computed: {
     token: {
       get: function() {
-        return localStorage.getItem('id_token')
+        return this.tokenValue
       },
       set: function(id_token) {
+        this.tokenValue = id_token;
         localStorage.setItem('id_token', id_token)
       }
     },
@@ -33,18 +42,19 @@ let auth = new Vue({
     // },
     expiresAt: {
       get: function() {
-        return localStorage.getItem('expires_at')
+        return this.expiresAtValue;
       },
       set: function(expiresIn) {
-        let expiresAt = JSON.stringify(expiresIn * 1000 + new Date().getTime())
-        localStorage.setItem('expires_at', expiresAt)
+        this.expiresAtValue = JSON.stringify(expiresIn * 1000 + new Date().getTime())
+        localStorage.setItem('expires_at', this.expiresAtValue)
       }
     },
     user: {
       get: function() {
-        return JSON.parse(localStorage.getItem('user'))
+        return this.userValue;
       },
       set: function(user) {
+        this.userValue = user;
         localStorage.setItem('user', JSON.stringify(user))
       }
     }
@@ -60,7 +70,7 @@ let auth = new Vue({
         localStorage.removeItem('expires_at')
         localStorage.removeItem('user')
         webAuth.logout({
-          returnTo: 'http://localhost:8080', 
+          returnTo: 'http://localhost:8080/', 
           // Allowed logout URL listed in dashboard
           clientID: 'IaFVKRgZXNWFczYUBBodM1MA4Km7n2li',
           // Your client ID

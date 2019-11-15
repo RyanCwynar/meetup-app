@@ -40,6 +40,7 @@
     </v-app-bar>
 </template>
 <script>
+import _ from 'lodash'
 export default {
     props: {
         drawer: Boolean
@@ -54,7 +55,7 @@ export default {
             }
         },
         avatarSource(){
-          return this.$auth.user.picture || "https://cdn.vuetifyjs.com/images/logos/logo.svg";
+          return _.get(this, '$auth.user.picture', '') || "https://cdn.vuetifyjs.com/images/logos/logo.svg";
         }
     }
 }
