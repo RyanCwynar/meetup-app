@@ -13,7 +13,16 @@
 <script>
 // @ is an alias to /src
 import {event} from '@/mocks/data'
+import {getEvent} from '@/graphql/queries'
 export default {
+   apollo: {
+    event: {
+      query: getEvent,
+      variables() {
+        return {id: this.$route.params.id}
+      }
+    }
+  },
  
   created(){
     // dispatch getEvent query

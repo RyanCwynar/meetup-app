@@ -1,12 +1,19 @@
 import gql from "graphql-tag";
 
-export const oauth = gql`
- mutation oAuthRegistration($email: String!, $name: String!){
-     oauth(email: $email, name: $name){
-        token
-        user{
-            name
-            email
-        }
+export const upsertUser = gql`
+ mutation upsertUser($name: String!){
+     authorize(name: $name){
+        id
+        auth0id
+        name
+        role
      }
  }`;
+
+export const createGroup = gql`
+    mutation createGroup($name: String!){
+        createGroup(name: $name){
+            name
+        }
+    }
+`
