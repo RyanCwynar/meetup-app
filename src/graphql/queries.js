@@ -23,7 +23,12 @@ query getGroup($id: String!){
     group(id: $id){
         id
         name
+        description
         owner{
+            name
+        }
+        members{
+            id
             name
         }
         events{
@@ -39,6 +44,7 @@ query getGroups{
     groups{
         id
         name
+        description
         owner{
             name
         }
@@ -49,6 +55,25 @@ query getGroups{
 export const getEvent = gql`
 query getEvent($id: String!){
     event(id: $id){
+        id
+        name
+        group{
+            name
+        }
+        description
+        startTime
+        endTime
+        usersAttending{
+            id
+            name
+        }
+    }
+}
+`
+
+export const getEvents = gql`
+query getEvents{
+    events{
         id
         name
         group{

@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mb-4"
+    class="mb-4 mr-4"
     max-width="400"
     outlined
     

@@ -11,9 +11,11 @@ export const upsertUser = gql`
  }`;
 
 export const createGroup = gql`
-    mutation createGroup($name: String!){
-        createGroup(name: $name){
+    mutation createGroup($name: String!, $description: String){
+        createGroup(name: $name, description: $description){
+            id
             name
+            description
         }
     }
 `
@@ -31,7 +33,10 @@ export const createEvent = gql`
             description
             startTime
             endTime
-            usersAttending
+            usersAttending{
+                id
+                name
+            }
         }
     }
 `
@@ -61,6 +66,46 @@ export const leaveEvent = gql`
             startTime
             endTime
             usersAttending{
+                id
+                name
+            }
+        }
+    }
+`
+
+export const joinGroup = gql`
+    mutation joinGroup($id: String!){
+        joinGroup(groupId: $id){
+            id
+            name
+            owner{
+                name
+            }
+            members{
+                id
+                name
+            }
+            events{
+                id
+                name
+            }
+        }
+    }
+`
+
+export const leaveGroup = gql`
+    mutation leaveGroup($id: String!){
+        leaveGroup(groupId: $id){
+            id
+            name
+            owner{
+                name
+            }
+            members{
+                id
+                name
+            }
+            events{
                 id
                 name
             }

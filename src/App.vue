@@ -19,34 +19,20 @@
         </v-row>
       </v-container>
     </v-content>
-    <v-btn
-      bottom
-      color="pink"
-      dark
-      fab
-      fixed
-      right
-      @click="dialog = !dialog"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
-    <create-event-dialog 
-      :dialog="dialog" 
-      @dialogState="dialog = $event"/>
+   
   </v-app>
 </template>
 
 <script>
   import AppHeader from '@/components/AppHeader.vue'
   import AppNavDrawer from '@/components/AppNavDrawer.vue'
-  import CreateEventDialog from '@/components/CreateEventDialog.vue'
+ 
   export default {
     props: {
       source: String,
     },
-    components: {AppHeader, AppNavDrawer, CreateEventDialog},
+    components: {AppHeader, AppNavDrawer},
     data: () => ({
-      dialog: false,
       drawer: null,
     }),
   }

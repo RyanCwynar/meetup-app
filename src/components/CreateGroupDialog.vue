@@ -5,7 +5,7 @@
     >
       <v-card>
         <v-card-title class="grey darken-2">
-          Create event
+          Create group
         </v-card-title>
         <v-container>
           <v-row>
@@ -13,9 +13,9 @@
               class="align-center justify-space-between"
               cols="12"
             >
-              <form id="create-event-form">
-                <v-text-field v-model="newEvent.name" placeholder="Event Name"/>
-                <v-text-field v-model="newEvent.description" placeholder="Event Description"/>
+              <form id="create-group-form">
+                <v-text-field v-model="newGroup.name" placeholder="Group Name"/>
+                <v-text-field v-model="newGroup.description" placeholder="Group Description"/>
               </form>
             </v-col>
           </v-row>
@@ -37,14 +37,14 @@
     </v-dialog>
 </template>
 <script>
-import { createEvent } from '@/graphql/mutations'
+import { createGroup } from '@/graphql/mutations'
 export default {
   props: {
     dialog: {
       type: Boolean,
       default: false,
     },
-    groupId: String
+    ownerId: String
   },
   computed: {
     dialogState: {
@@ -57,27 +57,21 @@ export default {
     }
   },
   data: () => ({
-    newEvent: {
+    newGroup: {
       name: '',
       description: '',
-      group: '',
-      start: new Date(),
-      end: new Date(),
     }
   }),
   methods: {
     create(){
-
-      this.newEvent.group = this.groupId;
-
       this.$apollo.mutate({
-        mutation: createEvent,
+        mutation: createGroup,
         variables: {
-          ...this.newEvent,
+          ...this.newGroup,
         }
       })
       .then(()=>{
-         this.dialogState = false;
+        this.dialogState = false;
       })
       .catch(console.error)
     },
