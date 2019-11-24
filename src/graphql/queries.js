@@ -1,13 +1,9 @@
 import gql from "graphql-tag";
 
-export const tokenTest = gql`
-    query {
-        tokenTest
-    }
-`
 export const getMe = gql`
 query {
     me{
+        id
         name
         auth0id
         ownerOf {
@@ -38,15 +34,30 @@ query getGroup($id: String!){
 }
 `
 
-export const getEvent = gql`
-query getEvent($id: String!){
-    event(id: $id){
+export const getGroups = gql`
+query getGroups{
+    groups{
         id
         name
         owner{
             name
         }
-        events{
+    }
+}
+`
+
+export const getEvent = gql`
+query getEvent($id: String!){
+    event(id: $id){
+        id
+        name
+        group{
+            name
+        }
+        description
+        startTime
+        endTime
+        usersAttending{
             id
             name
         }
