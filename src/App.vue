@@ -7,17 +7,7 @@
       :drawer="drawer" 
       @drawerState="drawer = $event"/>
     <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <router-view/>
-        </v-row>
-      </v-container>
+      <router-view/>
     </v-content>
    
   </v-app>
@@ -31,7 +21,7 @@
     props: {
       source: String,
     },
-    components: {AppHeader, AppNavDrawer},
+    components: { AppHeader, AppNavDrawer },
     data: () => ({
       drawer: null,
     }),

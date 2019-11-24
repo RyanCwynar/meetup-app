@@ -1,5 +1,5 @@
 <template>
-  <div class="profile">
+  <v-container class="profile">
     <h1>{{name}}</h1>
     <div v-if="me.ownerOf.length > 0">
       <h2>Group Owner of</h2>
@@ -29,7 +29,7 @@
       </v-row>
     </div>
     <create-group-component/>
-  </div>
+  </v-container>
 </template>
 
 <script>
