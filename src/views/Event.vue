@@ -1,6 +1,5 @@
 <template>
-  <v-container >
-    
+  <v-container v-if="event.name">
     <h1>{{event.name}}</h1>
     <h3>{{event.group.name}}</h3>
     <p>{{event.description}}</p>
@@ -23,7 +22,7 @@ export default {
     event: {
       query: getEvent,
       variables() {
-        return {id: this.$route.params.id}
+        return { id: this.$route.params.id }
       }
     }
   },

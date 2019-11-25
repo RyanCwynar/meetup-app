@@ -1,12 +1,14 @@
 <template>
   
     <v-container >
-      <v-row class="px-4"><h1>Events</h1></v-row>
-      <v-row class="px-4" justify="start" align="start">
-        <event-tile class="mr-4 mb-4" v-for="(event, index) in events"
-          :key="index"
-          v-bind="event" />
-      </v-row>
+      <v-col>
+        <h1>Events</h1>
+        <v-row justify="start" align="start">
+          <event-tile class="mr-4 mb-4" v-for="(event, index) in events"
+            :key="index"
+            v-bind="event" />
+        </v-row>
+      </v-col>
     </v-container>
   
 </template>

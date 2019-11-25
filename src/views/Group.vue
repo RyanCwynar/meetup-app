@@ -1,35 +1,38 @@
 <template>
-  <v-container >
-    <v-row class="px-4">
-      <v-col>
-        <h1>{{group.name}}</h1>
-        <p class="subtitle">{{group.owner.name}}</p>
-        <p class="subtitle">{{group.id}}</p>
-      </v-col>
-    </v-row>
-    <v-row class="px-4">
-      {{group.description}}
-    </v-row>
-    <v-row class="px-4"  v-if="!ownsThisGroup">
-      <v-col>
-      <v-btn @click="toggleMembership" :color="isGroupMember ? '' : 'primary'">
+  <v-container v-if="group.name">
+    <v-col>
+      <h1>{{group.name}}</h1>
+      <h4>{{group.owner.name}}</h4>
+      <p v-if="group.description">{{group.description}}</p>
+      <v-btn
+        v-if="!ownsThisGroup" 
+        @click="toggleMembership" 
+        :color="isGroupMember ? '' : 'primary'">
         {{ isGroupMember ? 'Leave' : 'Join' }}
       </v-btn>
-      </v-col>
-    </v-row>
-    
-    <v-row class="px-4" v-if="group.events.length > 0">
-      <h2>Upcoming Events</h2>
-    </v-row>
-    <v-row class="px-4" justify="space-between" align="start">
-      <event-tile v-for="(event, index) in group.events"
-        :key="index"
-        v-bind="event" />
-    </v-row>
-    <v-col class="px-4 pt-4" v-if="hasMembers">
-      <h2>Members</h2>
-      <v-row v-if="hasMembers" class="px-4" justify="start" align="start">
-        <v-chip v-for="(member, index) in group.members" :key="index">{{member.name}}</v-chip>
+    </v-col>
+    <v-col v-if="group.events.length > 0">
+      <h2 class="mb-2">Upcoming Events</h2>
+      <v-row class="px-4">
+        <event-tile class="mb-4 mr-4" v-for="(event, index) in group.events"
+          :key="index"
+          v-bind="event"
+        />
+      </v-row>
+    </v-col>
+    <v-col 
+      class="pt-4" 
+      v-if="hasMembers">
+      <h2 class="mb-2">Members</h2>
+      <v-row 
+        v-if="hasMembers" 
+        class="px-4" 
+      >
+        <v-chip 
+          v-for="(member, index) in group.members" 
+          :key="index">
+          {{member.name}}
+        </v-chip>
       </v-row>
     </v-col>
     <create-event-component  v-if="ownsThisGroup" :groupId="group.id"/>
@@ -90,31 +93,9 @@ export default {
         owner: {name: ''},
         events: []
       },
-      // newEvent: {
-      //   name: '',
-      //   description: '',
-      //   group: '',
-      //   start: new Date(),
-      //   end: new Date(),
-      // }
     }
   },
   methods: {
-    
-    // createEvent(){
-    //   if(this.ownsThisGroup){
-    //     this.newEvent.group = this.group.id;
-      
-    //     this.$apollo.mutate({
-    //       mutation: createEvent,
-    //       variables: {
-    //         ...this.newEvent,
-    //       }
-    //     });
-    //   } else {
-    //     throw new Error('User does not own this group');
-    //   }
-    // },
     toggleMembership(){
       (this.isGroupMember) ? this.leaveGroup() : this.joinGroup();
     },

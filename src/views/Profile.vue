@@ -7,11 +7,9 @@
         <v-card v-for="(group,index) in me.ownerOf"
           class="ma-2"
           :to="'/group/'+group.id"
-          :key="index"
-        >
+          :key="index">
           <v-card-title>{{group.name}}</v-card-title>
-          <v-card-subtitle>{{group.id}}</v-card-subtitle>
-          <v-card-text>{{group.description}}</v-card-text>
+          <v-card-subtitle>{{group.description}}</v-card-subtitle>
         </v-card>
       </v-row>
     </div>
@@ -21,10 +19,8 @@
         <v-card v-for="(group,index) in me.memberOf"
           class="ma-2"
           :to="'/group/'+group.id"
-          :key="index"
-        >
+          :key="index">
           <v-card-title>{{group.name}}</v-card-title>
-          <v-card-subtitle>{{group.id}}</v-card-subtitle>
         </v-card>
       </v-row>
     </div>
