@@ -1,5 +1,6 @@
 <template>
   <v-container v-if="event.name">
+    <v-row>
     <v-col>
       <v-btn v-if="ownsThisGroup" @click="deleteEvent">Delete Event</v-btn>
       <h1>{{event.name}}</h1>
@@ -7,17 +8,21 @@
       <p>{{event.description}}</p>
       <p><a :href="event.mapUrl">{{event.addressText}}</a></p>
       <p v-if="event.date && event.startTime && event.endTime">Date: {{event.date}} from {{event.startTime}} to {{event.endTime}}</p>
-      <v-btn @click="toggleRsvp" :color="attending ? '' : 'primary'">
-        {{ attending ? 'Leave' : 'Attend' }}
-      </v-btn>
+      
     </v-col>
+    <user-chips-block :members="event.usersAttending" heading="Members Attending">
+      <v-btn @click="toggleRsvp" :color="userIsAttending ? '' : 'primary'">
+        {{ userIsAttending ? 'Leave' : 'Attend' }}
+      </v-btn>
+    </user-chips-block>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
-
-import { getEvent, getMe } from '@/graphql/queries'
+import UserChipsBlock from '@/components/UserChipsBlock'
+import { getEvent, getMe, getGroup } from '@/graphql/queries'
 import { joinEvent, leaveEvent, deleteEvent } from '@/graphql/mutations'
 import _ from 'lodash'
 
@@ -29,11 +34,15 @@ export default {
       variables() {
         return { id: this.$route.params.id }
       }
+    },
+    group: {
+      query: getGroup,
+      variables() {
+        return { id: this.event.group.id }
+      }
     }
   },
-  mounted(){
-    this.attending = this.isUserAttending();
-  },
+  components: {UserChipsBlock},
   computed: {
     ownsThisGroup(){
       if(_.get(this, 'me.ownerOf')){
@@ -44,6 +53,14 @@ export default {
         return ownedGroups.length > 0;
       }
       return false;
+    },
+    userIsAttending(){
+      if(_.get(this, 'event.usersAttending') && _.get(this, 'me.id')){
+        let arr = this.event.usersAttending.filter(({id}) => this.me.id == id)
+        return arr.length > 0
+      }else{
+        return false
+      }
     },
   },
   data() {
@@ -56,25 +73,19 @@ export default {
           id: '',
           name: '' },
       },
-      attending: false,
+      
     }
   },
   methods: {
-    isUserAttending(){
-      if(_.get(this, 'event.usersAttending') && _.get(this, 'me.id')){
-        let arr = this.event.usersAttending.filter(user => this.me.id == user.id)
-        return arr.length > 0
-      }else{
-        return false
-      }
-    },
+    
     toggleRsvp() {
       // dispatch joinEvent or leaveEvent query
-      (this.attending) ? this.leaveEvent() : this.joinEvent();
+      (this.userIsAttending) ? this.leaveEvent() : this.joinEvent();
     },
     deleteEvent(){
       this.$apollo.mutate({mutation: deleteEvent, variables: {id: this.event.id}})
       .then(()=>{
+        this.$apollo.queries.group.refetch();
         this.$router.push({path: "/group/" + this.event.group.id })
       })
       .catch(console.error)
@@ -84,10 +95,7 @@ export default {
         mutation: joinEvent,
         variables: {id: this.$route.params.id}
       })
-      .then(({data: { joinEvent: event }})=>{
-         this.attending = true;
-         this.event = _.merge(this.event, event);
-      })
+      .then(()=>this.$apollo.queries.event.refetch())
       .catch(console.error)
     },
     leaveEvent(){
@@ -95,10 +103,7 @@ export default {
         mutation: leaveEvent,
         variables: {id: this.$route.params.id}
       })
-      .then(({data: { leaveEvent: event }})=>{
-        this.attending = false;
-        this.event = _.merge(this.event, event);
-      })
+      .then(()=>this.$apollo.queries.event.refetch())
       .catch(console.error)
     }
   }

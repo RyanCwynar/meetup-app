@@ -1,18 +1,14 @@
 <template>
   <v-container v-if="group.name">
+    <v-row>
     <v-col>
       <v-btn v-if="ownsThisGroup" @click="deleteGroup">Delete Group</v-btn>
       <h1>{{group.name}}</h1>
       <h4>{{group.owner.name}}</h4>
       <p v-if="group.description">{{group.description}}</p>
-      <v-btn
-        v-if="!ownsThisGroup" 
-        @click="toggleMembership" 
-        :color="isGroupMember ? '' : 'primary'">
-        {{ isGroupMember ? 'Leave' : 'Join' }}
-      </v-btn>
-    </v-col>
-    <v-col v-if="group.events.length > 0">
+      
+    
+    <div v-if="group.events.length > 0">
       <h2 class="mb-2">Upcoming Events</h2>
       <v-row class="px-2">
         <event-tile class="mb-4 mr-4" v-for="(event, index) in group.events"
@@ -20,19 +16,17 @@
           v-bind="event"
         />
       </v-row>
+    </div>
     </v-col>
-    <v-col 
-      class="pt-4" 
-      v-if="hasMembers">
-      <h2 class="mb-2">Members</h2>
-      <v-row class="px-2" v-if="hasMembers">
-        <v-chip 
-          v-for="(member, index) in group.members" 
-          :key="index">
-          {{member.name}}
-        </v-chip>
-      </v-row>
-    </v-col>
+    <user-chips-block :members="group.members">
+      <v-btn
+        v-if="!ownsThisGroup" 
+        @click="toggleMembership" 
+        :color="isGroupMember ? '' : 'primary'">
+        {{ isGroupMember ? 'Leave' : 'Join' }}
+      </v-btn>
+    </user-chips-block>
+    </v-row>
     <create-event-component  v-if="ownsThisGroup" :groupId="group.id" @closeDialog="$apollo.queries.group.refetch()"/>
   </v-container>
 </template>
@@ -40,6 +34,7 @@
 <script>
 // @ is an alias to /src
 import CreateEventComponent from '@/components/CreateEventComponent'
+import UserChipsBlock from '@/components/UserChipsBlock'
 import { getGroup, getMe } from '@/graphql/queries'
 import { joinGroup, leaveGroup, deleteGroup } from '@/graphql/mutations'
 import EventTile from '@/components/EventTile'
@@ -55,7 +50,8 @@ export default {
       }
     }
   },
-  components: { EventTile, CreateEventComponent },
+  mounted(){this.$apollo.queries.group.refetch()},
+  components: { EventTile, CreateEventComponent, UserChipsBlock },
   computed: {
     ownsThisGroup(){
       if(_.get(this, 'me.ownerOf')){

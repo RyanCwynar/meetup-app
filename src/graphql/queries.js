@@ -83,16 +83,11 @@ query getEvents{
     events{
         id
         name
-        group{
-            name
-        }
         description
+        date
         startTime
         endTime
-        usersAttending{
-            id
-            name
-        }
+        addressText
     }
 }
 `
@@ -102,16 +97,11 @@ export const searchEvents = gql`
      searchEvents(searchTerm: $searchTerm){
         id
         name
-        group{
-            name
-        }
         description
+        date
         startTime
         endTime
-        usersAttending{
-            id
-            name
-        }
+        addressText
     }
 }
 `

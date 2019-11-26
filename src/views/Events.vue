@@ -30,6 +30,11 @@ export default {
       events: []
     }
   },
+  mounted() {
+    if(!this.$root.searchTerm){
+      this.$apollo.queries.events.refetch()
+    }
+  },
   watch: {
     '$root.searchTerm': function(value){
       // cancel pending call
