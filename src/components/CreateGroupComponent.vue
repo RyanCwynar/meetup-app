@@ -25,7 +25,16 @@
       source: String,
       groupId: String
     },
-    components: {CreateGroupDialog},
+    components: {
+      CreateGroupDialog
+    },
+    watch: {
+      dialog(n){
+        if(n == false){
+          this.$emit('closeDialog', true);
+        }
+      }
+    },
     data: () => ({
       dialog: false,
     }),

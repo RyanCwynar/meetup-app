@@ -34,6 +34,7 @@
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-apollo": "^0.21.3",
     "vue-cli-plugin-vuetify": "^2.0.2",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-google-autocomplete": "^2.0.0-beta.8"
   }
 }

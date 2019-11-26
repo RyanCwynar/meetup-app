@@ -1,11 +1,16 @@
 <template>
   <v-container v-if="event.name">
-    <h1>{{event.name}}</h1>
-    <h3>{{event.group.name}}</h3>
-    <p>{{event.description}}</p>
-    <v-btn @click="toggleRsvp" :color="attending ? '' : 'primary'">
-      {{ attending ? 'Leave' : 'Attend' }}
-    </v-btn>
+    <v-col>
+      <v-btn v-if="ownsThisGroup" @click="deleteEvent">Delete Event</v-btn>
+      <h1>{{event.name}}</h1>
+      <h3>{{event.group.name}}</h3>
+      <p>{{event.description}}</p>
+      <p><a :href="event.mapUrl">{{event.addressText}}</a></p>
+      <p v-if="event.date && event.startTime && event.endTime">Date: {{event.date}} from {{event.startTime}} to {{event.endTime}}</p>
+      <v-btn @click="toggleRsvp" :color="attending ? '' : 'primary'">
+        {{ attending ? 'Leave' : 'Attend' }}
+      </v-btn>
+    </v-col>
   </v-container>
 </template>
 
@@ -13,7 +18,7 @@
 // @ is an alias to /src
 
 import { getEvent, getMe } from '@/graphql/queries'
-import { joinEvent, leaveEvent } from '@/graphql/mutations'
+import { joinEvent, leaveEvent, deleteEvent } from '@/graphql/mutations'
 import _ from 'lodash'
 
 export default {
@@ -29,13 +34,27 @@ export default {
   mounted(){
     this.attending = this.isUserAttending();
   },
+  computed: {
+    ownsThisGroup(){
+      if(_.get(this, 'me.ownerOf')){
+        let ownedGroups = this.me.ownerOf.filter( ({id}) => {
+          return id == this.event.group.id;
+        });
+        
+        return ownedGroups.length > 0;
+      }
+      return false;
+    },
+  },
   data() {
     return {
       event: {
         id: this.$route.params.id,
         name: '',
         description: '',
-        group: { name: '' },
+        group: {
+          id: '',
+          name: '' },
       },
       attending: false,
     }
@@ -52,6 +71,13 @@ export default {
     toggleRsvp() {
       // dispatch joinEvent or leaveEvent query
       (this.attending) ? this.leaveEvent() : this.joinEvent();
+    },
+    deleteEvent(){
+      this.$apollo.mutate({mutation: deleteEvent, variables: {id: this.event.id}})
+      .then(()=>{
+        this.$router.push({path: "/group/" + this.event.group.id })
+      })
+      .catch(console.error)
     },
     joinEvent(){
       this.$apollo.mutate({

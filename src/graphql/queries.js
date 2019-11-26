@@ -58,9 +58,16 @@ query getEvent($id: String!){
         id
         name
         group{
+            id
             name
         }
+        latitude
+        longitude
+        mapUrl
+        addressText
+        addressHtml
         description
+        date
         startTime
         endTime
         usersAttending{
@@ -74,6 +81,25 @@ query getEvent($id: String!){
 export const getEvents = gql`
 query getEvents{
     events{
+        id
+        name
+        group{
+            name
+        }
+        description
+        startTime
+        endTime
+        usersAttending{
+            id
+            name
+        }
+    }
+}
+`
+
+export const searchEvents = gql`
+ query searchEvents($searchTerm: String){
+     searchEvents(searchTerm: $searchTerm){
         id
         name
         group{

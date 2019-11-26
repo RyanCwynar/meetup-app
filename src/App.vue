@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app>
     <app-nav-drawer 
       :drawer="drawer" 
       @drawerState="drawer = $event"/>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+  
   import AppHeader from '@/components/AppHeader.vue'
   import AppNavDrawer from '@/components/AppNavDrawer.vue'
  

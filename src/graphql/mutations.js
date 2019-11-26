@@ -19,20 +19,51 @@ export const createGroup = gql`
         }
     }
 `
+export const deleteGroup = gql`
+    mutation deleteGroup($id: String!){
+        deleteGroup(groupId: $id){
+            id
+            name
+        }
+    }
+`
 
 export const createEvent = gql`
-    mutation createEvent($name: String!, $description: String, $group: String!, $start: String, $end: String){
+    mutation createEvent(
+        $name: String!, 
+        $description: String, 
+        $group: String!,
+        $date: String, 
+        $start: String, 
+        $end: String,
+        $latitude: Float,
+        $longitude: Float,
+        $mapUrl: String,
+        $addressText: String,
+        $addressHtml: String,){
         createEvent(event: {
             name: $name
             description: $description
             group: $group
             startTime: $start
             endTime: $end
+            date: $date
+            latitude: $latitude
+            longitude: $longitude
+            mapUrl: $mapUrl
+            addressText: $addressText
+            addressHtml: $addressHtml
         }){
             name
             description
+            date
             startTime
             endTime
+            latitude
+            longitude
+            mapUrl
+            addressText
+            addressHtml
             usersAttending{
                 id
                 name
@@ -61,6 +92,21 @@ export const joinEvent = gql`
 export const leaveEvent = gql`
     mutation leaveEvent($id: String!){
         leaveEvent(eventId: $id){
+            name
+            description
+            startTime
+            endTime
+            usersAttending{
+                id
+                name
+            }
+        }
+    }
+`
+
+export const deleteEvent = gql`
+    mutation deleteEvent($id: String!){
+        deleteEvent(eventId: $id){
             name
             description
             startTime

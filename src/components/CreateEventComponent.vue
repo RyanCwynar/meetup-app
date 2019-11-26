@@ -26,6 +26,13 @@
       source: String,
       groupId: String
     },
+    watch: {
+      dialog(v){
+        if(v === false){
+          this.$emit('closeDialog', true);
+        }
+      }
+    },
     components: {CreateEventDialog},
     data: () => ({
       dialog: false,

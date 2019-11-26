@@ -3,8 +3,10 @@
     <v-container >
       <v-col>
         <h1>Events</h1>
-        <v-row justify="start" align="start">
-          <event-tile class="mr-4 mb-4" v-for="(event, index) in events"
+        <v-row class="px-2">
+          <event-tile 
+            class="mr-4 mb-4" 
+            v-for="(event, index) in events"
             :key="index"
             v-bind="event" />
         </v-row>
@@ -15,7 +17,7 @@
 
 <script>
 // @ is an alias to /src
-import { getEvents } from '@/graphql/queries'
+import { getEvents, searchEvents } from '@/graphql/queries'
 import EventTile from '@/components/EventTile'
 
 export default {
@@ -26,6 +28,26 @@ export default {
   data(){
     return {
       events: []
+    }
+  },
+  watch: {
+    '$root.searchTerm': function(value){
+      // cancel pending call
+      clearTimeout(this._timerId)
+      // delay new call 500ms
+      this._timerId = setTimeout(() => {
+        this.search(value)
+      }, 500)
+    }
+  },
+  methods: {
+
+    search(term){
+      this.$apollo.query({ query: searchEvents, variables: {searchTerm: term}})
+      .then(({data: {searchEvents: events}}) => {
+        this.events = events
+      })
+      .catch(console.error)
     }
   }
 }
