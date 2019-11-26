@@ -2,6 +2,7 @@
   
     <v-container >
       <v-col>
+        <v-btn @click="geolocate">Get Location</v-btn>
         <h1>Events</h1>
         <v-row class="px-2">
           <event-tile 
@@ -27,7 +28,8 @@ export default {
   components: { EventTile },
   data(){
     return {
-      events: []
+      events: [],
+      userLocation: {lat: 0, lng: 0},
     }
   },
   mounted() {
@@ -39,6 +41,7 @@ export default {
     '$root.searchTerm': function(value){
       // cancel pending call
       clearTimeout(this._timerId)
+      
       // delay new call 500ms
       this._timerId = setTimeout(() => {
         this.search(value)
@@ -46,7 +49,14 @@ export default {
     }
   },
   methods: {
-
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
     search(term){
       this.$apollo.query({ query: searchEvents, variables: {searchTerm: term}})
       .then(({data: {searchEvents: events}}) => {
