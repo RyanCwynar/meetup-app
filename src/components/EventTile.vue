@@ -8,6 +8,7 @@
       <v-list-item-content>
         <div class="overline mb-4">EVENT</div>
         <v-list-item-title class="headline mb-1">{{name}}</v-list-item-title>
+        <v-card-subtitle v-if="distanceToUser">{{distanceToUser}} miles</v-card-subtitle>
         <v-card-text class="px-0 pb-0">
           {{description}}
         </v-card-text>
@@ -21,11 +22,18 @@
 </template>
 
 <script>
+
 export default {
     props: {
         id: String,
         name: String,
         description: String,
-    }
+        latitude: Number,
+        longitude: Number,
+        distanceToUser: {
+          type: Number,
+          default: 0
+        }
+    },
 }
 </script>

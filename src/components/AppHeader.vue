@@ -20,6 +20,15 @@
       class="hidden-sm-and-down"
       v-model="$root.searchTerm"
     />
+    <v-slider min=5 max=250 v-model='$root.searchDistance' label="Search distance(miles)"></v-slider>
+    <span>{{$root.searchDistance}}</span>
+    <vuetify-google-autocomplete
+        id="search-from"
+        append-icon="mdi-magnify"
+        placeholder="Search From"
+        v-on:placechanged="setUserLocation"
+    >
+    </vuetify-google-autocomplete>
     <v-spacer />
     <v-btn
       icon
@@ -42,6 +51,11 @@ import _ from 'lodash'
 export default {
     props: {
         drawer: Boolean
+    },
+    methods: {
+      setUserLocation({latitude = 0, longitude = 0}){
+        this.$root.userLocation = { latitude, longitude }
+      },
     },
     computed:{
         drawerState:{

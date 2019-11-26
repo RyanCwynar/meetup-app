@@ -23,7 +23,11 @@ new Vue({
   router,
   apolloProvider: createProvider(),
   vuetify,
-  data(){return { searchTerm: '' }},
+  data(){return {
+    searchTerm: '',
+    searchDistance: 20,
+    userLocation: { latitude: 0, longitude: 0},
+  }},
   watch: {
     searchTerm(val){
       if (!val) {

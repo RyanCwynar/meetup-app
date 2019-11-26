@@ -85,6 +85,8 @@ query getEvents{
         name
         description
         date
+        latitude
+        longitude
         startTime
         endTime
         addressText
@@ -93,12 +95,14 @@ query getEvents{
 `
 
 export const searchEvents = gql`
- query searchEvents($searchTerm: String){
-     searchEvents(searchTerm: $searchTerm){
+ query searchEvents($searchTerm: String, $latitude: Float, $longitude: Float, $distance: Float){
+     searchEvents(searchTerm: $searchTerm, latitude: $latitude, longitude: $longitude, distance: $distance){
         id
         name
         description
         date
+        latitude
+        longitude
         startTime
         endTime
         addressText
