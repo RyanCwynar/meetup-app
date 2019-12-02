@@ -66,7 +66,6 @@ new Vue({
       if (!val) {
         return
       } else if( this.$route.name !== 'events'){
-        console.log('fired')
         this.$router.push({name: 'events'})
       }
     }
