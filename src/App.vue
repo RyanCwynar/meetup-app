@@ -23,6 +23,7 @@
       source: String,
     },
     components: { AppHeader, AppNavDrawer },
+    
     data: () => ({
       drawer: null,
     }),

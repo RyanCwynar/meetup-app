@@ -8,7 +8,7 @@
             <v-chip 
             v-for="(member, index) in members" 
             :key="index">
-            {{member.name}}
+            {{member.name | noLastName}}
             </v-chip>
         </v-row>
       </div>
@@ -25,6 +25,6 @@ export default {
             type: String,
             default: "Members"
         }
-    }
+    },
 }
 </script>

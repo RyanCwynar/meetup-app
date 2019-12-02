@@ -2,8 +2,9 @@
   
     <v-container >
       <v-col>
-        <v-btn @click="geolocate">Get Location</v-btn>
+       
         <h1>Events</h1>
+        <v-btn icon @click="refetchEvents"><v-icon>mdi-refresh</v-icon></v-btn>
         <v-row class="px-2">
           <event-tile 
             class="mr-4 mb-4" 
@@ -19,7 +20,7 @@
 <script>
 // @ is an alias to /src
 import _ from 'lodash'
-import {getDistance} from 'geolib'
+import { getDistance } from 'geolib'
 import { getEvents, searchEvents } from '@/graphql/queries'
 import EventTile from '@/components/EventTile'
 
@@ -39,7 +40,10 @@ export default {
     }
   },
   watch: {
-    '$root.searchTerm': function(){
+    '$root.searchTerm': function(newVal, oldVal){
+      if(!newVal && oldVal){
+        this.$apollo.queries.events.refetch()
+      }
       // cancel pending call
       clearTimeout(this._timerId)
 
@@ -61,6 +65,7 @@ export default {
 
   },
   computed:{
+    
     sortedEvents(){
       const self = this
       let events = this.events.slice()
@@ -75,6 +80,9 @@ export default {
     }
   },
   methods: {
+    refetchEvents(){
+      return this.$apollo.queries.events.refetch()
+    },
     distanceToUser(latitude, longitude){
         if(typeof this.$root.userLocation.latitude == 'number'
           && typeof this.$root.userLocation.longitude == 'number'
@@ -91,14 +99,7 @@ export default {
     getMeters(i){
       return i*1609.344;
     },
-    geolocate() {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.$root.userLocation = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        };
-      });
-    },
+    
     search(){
       const term = this.$root.searchTerm
       if(term){

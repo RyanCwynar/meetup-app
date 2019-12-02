@@ -2,29 +2,28 @@
   <v-container>
   <v-col class="profile">
     <h1>{{name}}</h1>
-    <div v-if="ownsGroups">
-      <h2>Group Owner of</h2>
-      <v-row class="px-2">
-        <v-card v-for="(group,index) in me.ownerOf"
-          class="ma-2"
-          :to="'/group/'+group.id"
-          :key="index">
-          <v-card-title>{{group.name}}</v-card-title>
-          <v-card-subtitle>{{group.description}}</v-card-subtitle>
-        </v-card>
-      </v-row>
-    </div>
-    <div v-if="isGroupMember">
-      <h2>Member of Groups</h2>
-      <v-row class="px-2">
-        <v-card v-for="(group,index) in me.memberOf"
-          class="ma-2"
-          :to="'/group/'+group.id"
-          :key="index">
-          <v-card-title>{{group.name}}</v-card-title>
-        </v-card>
-      </v-row>
-    </div>
+    <v-row>
+      <v-col cols="12" sm="6"  v-if="ownsGroups">
+      <h2>Creator</h2>
+      <v-card v-for="(group,index) in me.ownerOf"
+        class="mb-4"
+        :to="'/group/'+group.id"
+        :key="index">
+        <v-card-title>{{group.name}}</v-card-title>
+        <v-card-subtitle>{{group.description}}</v-card-subtitle>
+      </v-card>
+      </v-col>
+      <v-col v-if="isGroupMember" cols="12" sm="6" >
+        <h2>Member</h2>
+        
+          <v-card v-for="(group,index) in me.memberOf"
+            class="mb-4"
+            :to="'/group/'+group.id"
+            :key="index">
+            <v-card-title>{{group.name}}</v-card-title>
+          </v-card>
+      </v-col>
+    </v-row>
     <create-group-component @closeDialog="$apollo.queries.me.refetch()"/>
   </v-col>
   </v-container>

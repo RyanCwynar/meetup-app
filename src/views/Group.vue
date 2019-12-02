@@ -4,7 +4,7 @@
     <v-col>
       <v-btn v-if="ownsThisGroup" @click="deleteGroup">Delete Group</v-btn>
       <h1>{{group.name}}</h1>
-      <h4>{{group.owner.name}}</h4>
+      <p>Created by {{group.owner.name | noLastName}}</p>
       <p v-if="group.description">{{group.description}}</p>
       
     

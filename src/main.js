@@ -18,7 +18,37 @@ Vue.use(VuetifyGoogleAutocomplete, {
 })
 
 Vue.config.productionTip = false
+Vue.mixin({
+  filters: {
+    noLastName(name){
+        let n = name.split(' ')
+        return `${n[0]} ${n[1][0]}.`
+    },
+    formatDate(date) {
+      date = new Date(date);
+      var monthNames = [
+        "Jan", "Feb", "Mar",
+        "April", "May", "June", "July",
+        "Aug", "Sept", "Oct",
+        "Nov", "Dec"
+      ];
 
+      var day = date.getDate();
+      var monthIndex = date.getMonth();
+      var year = date.getFullYear();
+
+      return `${monthNames[monthIndex]} ${parseInt(day)}, ${year}`;
+    },
+    formatTime(time){
+      let t = time.split(':')
+      let h = parseInt(t[0])
+      let m = parseInt(t[1])
+      let pm = false
+      if(h > 12) {pm = true; h = h % 12}
+      return `${h}${m > 0 ? ':'+m : ''}${pm ? 'p':'a'}`
+    },
+  },
+})
 new Vue({
   router,
   apolloProvider: createProvider(),
@@ -28,6 +58,9 @@ new Vue({
     searchDistance: 20,
     userLocation: { latitude: 0, longitude: 0},
   }},
+  
+    
+
   watch: {
     searchTerm(val){
       if (!val) {
@@ -38,5 +71,6 @@ new Vue({
       }
     }
   },
+  
   render: h => h(App)
 }).$mount('#app')

@@ -4,10 +4,10 @@
     <v-col>
       <v-btn v-if="ownsThisGroup" @click="deleteEvent">Delete Event</v-btn>
       <h1>{{event.name}}</h1>
-      <h3>{{event.group.name}}</h3>
+      <h3>Group: {{event.group.name}}</h3>
+      <p><a :href="event.mapUrl"><v-icon>mdi-map</v-icon> {{event.addressText}}</a></p>
+      <p v-if="event.date && event.startTime && event.endTime"><v-icon>mdi-clock</v-icon> {{event.date | formatDate}} {{event.startTime | formatTime}}-{{event.endTime | formatTime}}</p>
       <p>{{event.description}}</p>
-      <p><a :href="event.mapUrl">{{event.addressText}}</a></p>
-      <p v-if="event.date && event.startTime && event.endTime">Date: {{event.date}} from {{event.startTime}} to {{event.endTime}}</p>
       
     </v-col>
     <user-chips-block :members="event.usersAttending" heading="Members Attending">

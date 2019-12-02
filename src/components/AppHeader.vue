@@ -3,6 +3,7 @@
   <v-app-bar
     :clipped-left="$vuetify.breakpoint.lgAndUp"
     app
+    
     color="blue darken-3 pl-0"
     dark>
     <v-app-bar-nav-icon @click.stop="drawerState = !drawer" />
@@ -20,15 +21,24 @@
       class="hidden-sm-and-down"
       v-model="$root.searchTerm"
     />
-    <v-slider min=5 max=250 v-model='$root.searchDistance' label="Search distance(miles)"></v-slider>
-    <span>{{$root.searchDistance}}</span>
+    <v-col  cols="12" sm="1">
+      <v-select flat no-data-text hide-details solo-inverted :items="[5, 10, 25, 50, 100, 250]" v-model='$root.searchDistance' label="Dist" ></v-select>
+    </v-col>
+    <v-col  cols="12" sm="2" class="pl-0">
     <vuetify-google-autocomplete
+        flat
+        solo-inverted
+        no-data-text hide-details
         id="search-from"
-        append-icon="mdi-magnify"
+        class="search-from"
+        
         placeholder="Search From"
         v-on:placechanged="setUserLocation"
+       
     >
     </vuetify-google-autocomplete>
+    </v-col>
+    <v-btn icon @click="geolocate"><v-icon>mdi-target</v-icon></v-btn>
     <v-spacer />
     <v-btn
       icon
@@ -53,8 +63,22 @@ export default {
         drawer: Boolean
     },
     methods: {
-      setUserLocation({latitude = 0, longitude = 0}){
-        this.$root.userLocation = { latitude, longitude }
+      setUserLocation(placeData){
+        let latitude = _.get(placeData, 'latitude')
+        let longitude = _.get(placeData, 'longitude')
+        if(typeof latitude == 'number' && typeof longitude == 'number'){
+          this.$root.userLocation = { latitude, longitude }
+        }
+      },
+      geolocate() {
+        console.log('browser geolocate')
+        navigator.geolocation.getCurrentPosition(position => {
+          console.log(position)
+          this.$root.userLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+        });
       },
     },
     computed:{
@@ -72,3 +96,8 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.v-app-bar{
+  .v-input.search-from.v-text-field.v-text-field--solo .v-input__slot{ box-shadow: none; }
+}
+</style>

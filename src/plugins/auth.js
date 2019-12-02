@@ -7,7 +7,7 @@ let webAuth = new auth0.WebAuth({
   domain: 'dev-if74kmty.auth0.com',
   clientID: 'IaFVKRgZXNWFczYUBBodM1MA4Km7n2li',
   // make sure this line is contains the port: 8080
-  redirectUri: `http://localhost:8080/login`,
+  redirectUri: `http://joinus.ryancwynar.com/login`,
   // we will use the api/v2/ to access the user information as payload
   audience: 'meetup-alternative-api', 
   responseType: 'token id_token',
@@ -70,7 +70,7 @@ let auth = new Vue({
         localStorage.removeItem('expires_at')
         localStorage.removeItem('user')
         webAuth.logout({
-          returnTo: 'http://localhost:8080/', 
+          returnTo: process.env.APP_HOST, 
           // Allowed logout URL listed in dashboard
           clientID: 'IaFVKRgZXNWFczYUBBodM1MA4Km7n2li',
           // Your client ID
