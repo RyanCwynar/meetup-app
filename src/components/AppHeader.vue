@@ -10,7 +10,7 @@
     <v-toolbar-title
       style="width: 300px"
       class="ml-0 pl-0">
-      <span class="hidden-sm-and-down">Meetup Alternative</span>
+      <span class="hidden-sm-and-down">Join Us</span>
     </v-toolbar-title>
     <v-text-field
       flat
@@ -71,9 +71,9 @@ export default {
         }
       },
       geolocate() {
-        console.log('browser geolocate')
+       
         navigator.geolocation.getCurrentPosition(position => {
-          console.log(position)
+       
           this.$root.userLocation = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
