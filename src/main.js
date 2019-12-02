@@ -12,7 +12,7 @@ import '@mdi/font/css/materialdesignicons.css'
 Vue.use(Auth0Plugin);
 
 Vue.use(VuetifyGoogleAutocomplete, {
-  apiKey: 'AIzaSyCLQWCPeR0oZac37VR096XYdvSfXrPrREs',
+  apiKey: process.env.GCLOUD_API_KEY,
   // version: '2.0.0',
   // language: 'en'
 })
