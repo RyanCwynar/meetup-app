@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "@mdi/font": "^3.6.95",
-    "auth0-js": "^9.11.3",
+    "auth0-js": "^9.13.2",
     "lodash": "^4.17.15",
     "roboto-fontface": "*",
     "vue": "^2.6.10",
