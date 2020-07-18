@@ -11,7 +11,7 @@
     "@babel/polyfill": "^7.4.4",
     "@mdi/font": "^3.6.95",
     "auth0-js": "^9.11.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "roboto-fontface": "*",
     "vue": "^2.6.10",
     "vue-apollo": "^3.0.0-beta.11",
